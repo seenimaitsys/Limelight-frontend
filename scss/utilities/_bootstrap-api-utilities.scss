@@ -1,0 +1,115 @@
+// Import Bootstrap Utils first
+// otherwise our amends aren't added correctly
+@import "../../node_modules/bootstrap/scss/maps";
+@import "../../node_modules/bootstrap/scss/utilities";
+$utilities: map-merge(
+  $utilities,
+  (
+    "width": (
+      property: width,
+      class: w,
+      values: (
+        30: 30%,
+        42: 42%,
+      ),
+    ),
+    "height": (
+      property: height,
+      class: h,
+      values: (
+        44: 44px,
+      ),
+    ),
+    "font-size": (
+      rfs: true,
+      property: font-size,
+      class: fs,
+      values: (
+        35: 35px,
+        18: 18px,
+        16: 16px,
+        15: 15px,
+        13: 13px,
+        40: 40px,
+        25: 25px,
+        23: 22px,
+        20: 20px,
+      ),
+    ),
+    "font-weight": (
+      property: font-weight,
+      class: fw,
+      values: (
+        900: 900,
+      ),
+    ),
+    "color": (
+      property: color,
+      class: text,
+      values:
+        map-merge(
+          $theme-colors,
+          (
+            gray-100: #b9b9b9,
+            gray-200: #3e3e3e,
+          )
+        ),
+    ),
+    "margin-top": (
+      responsive: true,
+      property: margin-top,
+      class: mt,
+      values: (
+        6: 6rem,
+        n3: -3%,
+      ),
+    ),
+    "margin-bottom": (
+      responsive: true,
+      property: margin-bottom,
+      class: mb,
+      values: (
+        10: 10%,
+      ),
+    ),
+    "padding": (
+      responsive: true,
+      property: padding,
+      class: p,
+      values: (
+        10: 10px,
+
+        15: 15px,
+      ),
+    ),
+    "gradient": (
+      property: background-image,
+      class: bg,
+      values: (
+        login-bg: linear-gradient(180.2deg, #00463e 0.18%, #595959 150.98%),
+        login-submit: linear-gradient(90deg, #78c1c2 0%, #2a4e8c 100%),
+        decline_Reason:
+          linear-gradient(180.2deg, #a92d2d 0.18%, #502e2e 150.98%),
+        select-custom-icon:
+          url("../../src/assets/images/VectorNo_border_Dowm.svg"),
+      ),
+    ),
+    "border": (
+      property: border,
+      values: (
+        login-input: 1px solid #ffffff,
+        modal-border: 2px solid #33ceff,
+        video-border: 3px solid #1da5df,
+      ),
+    ),
+    "rounded": (
+      property: border-radius,
+      class: rounded,
+      values: (
+        30: 30px,
+        22: 22px,
+        10: 10px,
+      ),
+    ),
+  )
+);

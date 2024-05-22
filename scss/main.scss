@@ -1,0 +1,55 @@
+// when not install sass server the use [npm install scss and sass -w scss/main.scss{from} assets/css/custom.css{to}]
+// (or)
+//how to compile sass file [ install live sass-> setting-> search live sass-> edit in setting.json -> add tis code ->
+//    "liveSassCompile.settings.formats": [
+//     {
+//       "format": "compressed",
+//       "extensionName": ".min.css",
+//       "savePath": "/src/assert/css"
+//     }
+//   ],
+//->seve this.
+
+@import "../node_modules/bootstrap/scss/_functions.scss";
+@import "../node_modules/bootstrap/scss/_variables.scss";
+@import "../node_modules/bootstrap/scss/_mixins.scss";
+
+@import "./utilities/bootstrap-api-utilities";
+$grid-breakpoints: (
+  xs: 0,
+  xsm: 362px,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+  xxxl: 2000px,
+);
+.font-Poppins {
+  font-family: Poppins;
+}
+.letter-spacing {
+  letter-spacing: 2%;
+}
+.font-Inter {
+  font-family: Inter;
+}
+.display-webkit-box {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5; /* Number of lines to show */
+}
+//form design
+.login-form {
+  .login-input {
+    letter-spacing: 0.3px;
+    &::-webkit-input-placeholder {
+      color: #ffffff;
+    }
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+@import "../node_modules/bootstrap/scss/bootstrap";
