@@ -13,10 +13,8 @@ const loginReducer = (state = {}, action) => {
       state = {};
       break;
     case INIT_LOGIN_REQUEST:
-      state = { loading: false, success: false };
-      break;
     case LOGIN_REQUEST:
-      state = { loading: true, success: false };
+      state = { loading: true };
       break;
     case LOGIN_REQUEST_FAIL:
       state = { loading: false };

@@ -13,7 +13,9 @@ const VideoList = ({ videos }) => {
 
   // Logic for changing page
   const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+    if (pageNumber !== "...") {
+      setCurrentPage(pageNumber);
+    }
   };
 
   // Generate page numbers array
@@ -27,17 +29,29 @@ const VideoList = ({ videos }) => {
         pageNumbers.push(i);
       }
     } else {
-      let startPage;
+      let startPage, endPage;
+
       if (currentPage <= halfPagesToShow) {
         startPage = 1;
+        endPage = maxPagesToShow;
       } else if (currentPage + halfPagesToShow >= totalPages) {
         startPage = totalPages - maxPagesToShow + 1;
+        endPage = totalPages;
       } else {
         startPage = currentPage - halfPagesToShow;
+        endPage = currentPage + halfPagesToShow;
       }
 
-      for (let i = startPage; i < startPage + maxPagesToShow; i++) {
+      for (let i = startPage; i <= endPage; i++) {
         pageNumbers.push(i);
+      }
+
+      if (startPage > 1) {
+        pageNumbers.unshift(1, "...");
+      }
+
+      if (endPage < totalPages) {
+        pageNumbers.push("...", totalPages);
       }
     }
 

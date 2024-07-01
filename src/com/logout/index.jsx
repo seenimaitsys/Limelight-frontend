@@ -1,15 +1,16 @@
 import https from "../../axios";
-export const doLogout = async () => {
+export const doLogout = async (params) => {
+  const { id } = params;
+
   try {
-    return await https.post("/logout");
+    return await https.post("/logout", {
+      id,
+    });
   } catch (exception) {
-    const error = exception.toJSON();
     return {
-      data: {
-        loading: false,
-        success: true,
-        message: error.message,
-      },
+      loading: false,
+      success: false,
+      message: exception.message,
     };
   }
 };

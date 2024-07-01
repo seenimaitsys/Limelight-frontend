@@ -31,22 +31,19 @@ const DeclineReasonModal = ({ show, onHide, validated, handleSubmit }) => {
               role="input"
             >
               <option value="Your video contains inappropriate content" hidden>
-                Your video contains inappropriate content
+                Contains nudity or sexual activity
               </option>
-              <option value="Father" className="text-black">
-                Father
+              <option value="Inappropriate words" className="text-black">
+                Inappropriate words
               </option>
-              <option value="Mother" className="text-black">
-                Mother
+              <option value="Scam/Sale of illegal goods" className="text-black">
+                Scam/Sale of illegal goods
               </option>
-              <option value="Brother" className="text-black">
-                Brother
+              <option value="Drugs Usage" className="text-black">
+                Drugs Usage
               </option>
-              <option value="Sister" className="text-black">
-                Sister
-              </option>
-              <option value="Son" className="text-black">
-                Son
+              <option value="Violence" className="text-black">
+                Violence
               </option>
             </Form.Select>
             <Form.Control.Feedback type="invalid" className="text-start">

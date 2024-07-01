@@ -3,7 +3,7 @@ export const doLogin = async (params) => {
   const { email, password } = params;
 
   try {
-    return await https.post("/login", {
+    return await https.post("/auth/login", {
       email,
       password,
     });

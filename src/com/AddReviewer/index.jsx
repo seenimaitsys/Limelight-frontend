@@ -1,12 +1,11 @@
 import https from "../../axios";
 export const doInsertNewReviewer = async (params) => {
-  const { name, email, mobile, password } = params;
+  const { email, password, isManager } = params;
   try {
     return await https.post("/create", {
-      name,
-      mobile,
       email,
       password,
+      isManager,
     });
   } catch (exception) {
     const error = exception.toJSON();

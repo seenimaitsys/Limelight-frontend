@@ -5,7 +5,6 @@ import {
   GET_VIDEO_SUCCESS,
   GET_VIDEO_REQUEST_FAIL,
   UPDATE_VIDEO_REQUEST,
-  INIT_UPDATE_VIDEO_REQUEST,
   UPDATE_VIDEO_SUCCESS,
   UPDATE_VIDEO_REQUEST_FAIL,
 } from "../../actionTypes/Getvideos";
@@ -36,15 +35,6 @@ export const GetVideoRequestFail = (error) => {
     payload: error,
   };
 };
-////VIDEO REVIEWED FUNCTION
-
-// export const initupdateVideoRequest = (params) => {
-//   return {
-//     type: INIT_UPDATE_VIDEO_REQUEST,
-//     payload: params,
-//   };
-// };
-
 export const updateVideoRequest = (params) => {
   return {
     type: UPDATE_VIDEO_REQUEST,

@@ -2,14 +2,22 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { Container, Button, Form, Col, Row, Alert } from "react-bootstrap";
+import { Container, Button, Form, Col, Row } from "react-bootstrap";
 import { loginRequest } from "../../db/action/login";
 import { getVideoRequest } from "../../db/action/Getvideos";
+import { logoutRequest } from "../../db/action/logout";
+import Error from "../Error";
+import { useSelector } from "react-redux";
 
 const LoginForm = (props) => {
+  const Outh = useSelector((state) => state.getVideoReducer);
   const [validated, setValidated] = useState(false);
   const [formData, setFormData] = useState({});
-  const [error, seterror] = useState("");
+  const [showError, setShowError] = useState(false);
+  const [info, setInfo] = useState({
+    content: "",
+    variant: "",
+  });
   const navigate = useNavigate();
   const { loginReducer } = props;
   const handleChange = (e) => {
@@ -22,23 +30,60 @@ const LoginForm = (props) => {
     event.preventDefault();
     const form = event.currentTarget;
     if (form.checkValidity() === true) {
-      // event.stopPropagation();
-      // alert("yes");
       props.loginRequest(formData);
     }
 
     setValidated(true);
   };
   useEffect(() => {
-    const { success, message } = loginReducer;
-    if (success === true) {
-      // alert("yes");
-      props.getVideoRequest();
+    const { success, message, manager_id } = loginReducer;
+    if (success === true && !Outh.success) {
+      manager_id === import.meta.env.VITE_MANAGER
+        ? navigate("/manager")
+        : (props.getVideoRequest({
+            collection: import.meta.env.VITE_NEEDREVIEW_COLLECTION,
+            // requestType: import.meta.env.REQUESTTYPEE,
+          }),
+          navigate("/videos"));
+    } else if (success === true) {
       navigate("/videos");
     } else {
-      seterror(message);
+      setInfo({
+        ...info,
+        content: `${message}`,
+        variant: "danger",
+      });
+      message && setShowError(true);
     }
   }, [loginReducer]);
+
+  ///user click back or initial state
+  // useEffect(() => {
+  //   props.logoutRequest();
+  // }, []);
+  // const logout = () => {
+  //   // Your logout logic here, e.g., clearing tokens, calling API, etc.
+  //   console.log("User logged out");
+  //   props.getVideoRequest(),
+  //     // Example: clear local storage
+  //     localStorage.removeItem("authToken");
+  // };
+  // useEffect(() => {
+  //   const handleBeforeUnload = (event) => {
+  //     logout();
+  //     // Optional: Display a confirmation dialog to the user
+  //     const confirmationMessage = "Are you sure you want to leave?";
+  //     (event || window.event).returnValue = confirmationMessage; // Gecko + IE
+  //     return confirmationMessage; // Gecko + Webkit, Safari, Chrome, etc.
+  //   };
+
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
+
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   };
+  // });
+
   return (
     <Container
       fluid
@@ -60,13 +105,19 @@ const LoginForm = (props) => {
           onSubmit={handleSubmit}
           className="login-form w-100 p-3 p-lg-5 p-xl-5 p-xxl-5 p-md-5"
         >
-          {error && <Alert variant="danger">{error}</Alert>}
-
+          {/* {error && <Alert variant="danger">{error}</Alert>} */}
+          {showError && (
+            <Error
+              content={info.content}
+              variant={info.variant}
+              setShowError={setShowError}
+            />
+          )}
           <Form.Group>
             <Form.Control
-              type="text"
+              type="email"
               required={true}
-              className="login-input bg-transparent mt-2 h-44 rounded-22 border-login-input ps-4 d-flex justify-content-center text-white"
+              className="login-input text-lowercase bg-transparent mt-2 h-44 rounded-22 border-login-input ps-4 d-flex justify-content-center text-white"
               name="email"
               placeholder="User ID"
               autoComplete="off"
@@ -90,13 +141,17 @@ const LoginForm = (props) => {
               Please provide a valid Password.
             </Form.Control.Feedback>
 
-            <div className=" d-flex align-items-center justify-content-end font-Poppins text-white fw-normal fs-13 p-1 text-decoration-underline cursor-pointer">
+            <div
+              className=" d-flex align-items-center justify-content-end font-Poppins text-white fw-normal fs-13 p-1 text-decoration-underline cursor-pointer"
+              onClick={() => navigate("/forget")}
+            >
               Forgot password?
             </div>
           </Form.Group>
 
           <Button
             type="submit"
+            disabled={loginReducer.loading}
             className="w-100 h-44 rounded-30 mt-4  text-center fw-medium text-white fs-16 font-Poppins letter-spacing bg-login-submit"
           >
             {loginReducer.loading ? "loading..." : "Sign in"}
@@ -116,6 +171,7 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
       loginRequest,
+      logoutRequest,
       getVideoRequest,
     },
     dispatch

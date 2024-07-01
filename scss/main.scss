@@ -48,8 +48,14 @@ $grid-breakpoints: (
     }
   }
 }
-
+.letterSpacing-1 {
+  letter-spacing: 1px;
+}
 .cursor-pointer {
   cursor: pointer;
 }
+.box-shadow-video {
+  box-shadow: 1px 24px 17px -32px rgba(0, 0, 0, 0.45);
+}
+
 @import "../node_modules/bootstrap/scss/bootstrap";

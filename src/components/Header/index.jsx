@@ -2,7 +2,8 @@ import { Container, Navbar, Dropdown, Image, Col, Nav } from "react-bootstrap";
 import getherlyHeader from "../../assets/images/getherly.png";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import sample_men from "../../assets/images/sample-men.jpg";
+import sample_men from "../../assets/images/manlogo.png";
+// import image1 from "../../assets/images/image1.png";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logoutRequest } from "../../db/action/logout";
@@ -10,12 +11,13 @@ import { initLoginRequest } from "../../db/action/login";
 
 const Header = (props) => {
   const Outh = useSelector((state) => state.loginReducer);
-  // console.log(Outh);
+
   const navigate = useNavigate();
   const HandleLogout = () => {
+    props.logoutRequest({ id: Outh.id });
     props.initLoginRequest();
-    props.logoutRequest();
   };
+
   return (
     <>
       <Navbar expand="lg">
@@ -78,10 +80,23 @@ const Header = (props) => {
                 loading="lazy"
                 width={"75%"}
               ></Image>
+
+              {/* <Image
+                src={image1}
+                alt="getherly"
+                loading="lazy"
+                width={"100%"}
+                ></Image> */}
             </Navbar.Brand>
           </Col>
-          <Navbar.Toggle aria-controls="navbarScroll" />
-          <Navbar.Collapse id="navbarScroll">
+          {Outh.id && <Navbar.Toggle aria-controls="navbarScroll" />}
+
+          <Navbar.Collapse
+            id="navbarScroll"
+            className={`${
+              Outh.email?.split("@")[0].length >= 7 ? "me-3" : "me-5"
+            }`}
+          >
             <Nav
               className="me-auto my-2 my-lg-0"
               style={{ maxHeight: "100px" }}
@@ -101,11 +116,11 @@ const Header = (props) => {
                     id="dropdown-basic"
                     style={{ fontWeight: "500" }}
                   >
-                    {Outh.name}
+                    {Outh.email?.split("@")[0] + " "}
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>
-                    {Outh.allowAddNewReviewer && (
+                    {Outh.manager_id === import.meta.env.VITE_MANAGER && (
                       <Dropdown.Item onClick={() => navigate("/add-reviewer")}>
                         Add New Reviewer
                       </Dropdown.Item>

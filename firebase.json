@@ -1,0 +1,16 @@
+{
+  "hosting": {
+    "public": "dist",
+    "site": "helical-loop-415913",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ], "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
