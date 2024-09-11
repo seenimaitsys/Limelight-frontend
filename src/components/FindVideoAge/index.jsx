@@ -1,19 +1,15 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
-// Custom React hook to calculate age from a given date string
-function FindVideoAge(dateString) {
-  // Example date string const dateString = "May 19, 2024 at 6:42:17 PM GMT+5:30"; (firebase timestamb)
+function FindVideoAge(unixTimestamp) {
   // State to hold the age (in days, hours, and minutes)
   const [age, setAge] = useState({ days: 0, hours: 0, minutes: 0 });
 
-  // Effect to calculate the age when the component mounts or when the dateString changes
+  // Effect to calculate the age when the component mounts or when the unixTimestamp changes
   useEffect(() => {
-    // Function to calculate the age from the given date string
+    // Function to calculate the age from the given Unix timestamp
     function calculateAge() {
-      // Replace " at " with ", " to make the date string parseable
-      const trimmedDateString = dateString.replace(" at ", ", ");
-      // Parse the date string into a JavaScript Date object
-      const givenDate = new Date(trimmedDateString);
+      // Convert the Unix timestamp to milliseconds (JavaScript Date uses milliseconds)
+      const givenDate = new Date(unixTimestamp * 1000);
       // Get the current date and time
       const currentDate = new Date();
       // Calculate the difference in milliseconds between the current date and the given date
@@ -31,8 +27,8 @@ function FindVideoAge(dateString) {
     }
 
     // Call the calculateAge function
-    dateString && calculateAge();
-  }, [dateString]); // Run the effect whenever the dateString changes
+    unixTimestamp && calculateAge();
+  }, [unixTimestamp]); // Run the effect whenever the unixTimestamp changes
 
   // Return the age object
   return age;

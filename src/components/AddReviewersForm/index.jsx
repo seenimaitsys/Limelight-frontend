@@ -34,6 +34,7 @@ const AddReviewersForm = (props) => {
       event.stopPropagation();
       // console.log(formData);
       props.addReviewerRequest(formData);
+      // form.reset();
     }
 
     setValidated(true);
@@ -94,10 +95,11 @@ const AddReviewersForm = (props) => {
               name="email"
               placeholder="Email"
               autoComplete="off"
+              pattern="[^@\s]+@twigscorp\.com"
               onChange={handleChange}
             />
             <Form.Control.Feedback type="invalid">
-              Please provide a valid Email.
+              Please provide only twigscorp email.
             </Form.Control.Feedback>
           </Form.Group>
 

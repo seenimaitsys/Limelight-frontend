@@ -5,10 +5,9 @@ import {
   INIT_LOGIN_REQUEST,
 } from "../../actionTypes/login";
 
-export const initLoginRequest = (params) => {
+export const initLoginRequest = () => {
   return {
     type: INIT_LOGIN_REQUEST,
-    payload: params,
   };
 };
 

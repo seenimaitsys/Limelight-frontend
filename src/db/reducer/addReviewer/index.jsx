@@ -17,8 +17,7 @@ const addReviewerReducer = (state = {}, action) => {
     case ADDREVIEWER_SUCCESS:
       state = {
         ...state,
-        // accessToken: action.payload.accessToken,
-        // refreshToken: action.payload.refreshToken,
+        loading: false,
         ...action.payload,
       };
       break;

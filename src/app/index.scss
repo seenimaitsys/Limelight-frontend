@@ -1,10 +1,39 @@
 .App {
   text-align: center;
 }
-// @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap");
-@import url("https://fonts.googleapis.com/css?family=Poppins");
+
+.login-form .login-input {
+  letter-spacing: 0.3px;
+}
+
+.login-form .login-input::-webkit-input-placeholder {
+  color: #ffffff; /* For WebKit browsers like Chrome and Safari */
+}
+
+.login-form .login-input:-moz-placeholder {
+  color: #ffffff; /* For Firefox 18-28 */
+}
+
+.login-form .login-input::-moz-placeholder {
+  color: #ffffff; /* For Firefox 29+ */
+}
+
+.login-form .login-input:-ms-input-placeholder {
+  color: #ffffff; /* For Edge */
+}
+.font-Poppins {
+  font-family: font-Poppins;
+}
+
+.font-Inter {
+  font-family: font-Inter;
+}
 
 @font-face {
-  font-family: Poppins;
-  src: local("Source poppins Pro");
+  font-family: font-Poppins;
+  src: url("../assets/fonts/Poppins-Regular.ttf");
+}
+@font-face {
+  font-family: font-Inter;
+  src: url("../assets/fonts/Inter-Regular.ttf");
 }

@@ -4,15 +4,16 @@ import {
   INIT_LOGIN_REQUEST,
   LOGIN_REQUEST_FAIL,
 } from "../../actionTypes/login";
-import { LOGOUT_REQUEST, LOGOUT_SUCCESS } from "../../actionTypes/logout";
+import { LOGOUT_SUCCESS } from "../../actionTypes/logout";
 
 const loginReducer = (state = {}, action) => {
   switch (action.type) {
     case LOGOUT_SUCCESS:
-    case LOGOUT_REQUEST:
       state = {};
       break;
     case INIT_LOGIN_REQUEST:
+      state = {};
+      break;
     case LOGIN_REQUEST:
       state = { loading: true };
       break;

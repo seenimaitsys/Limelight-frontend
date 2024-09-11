@@ -3,7 +3,7 @@ export const doLogin = async (params) => {
   const { email, password } = params;
 
   try {
-    return await https.post("/auth/login", {
+    return await https.post("/api/auth/login", {
       email,
       password,
     });
@@ -13,7 +13,10 @@ export const doLogin = async (params) => {
       data: {
         loading: false,
         success: false,
-        message: error.message,
+        message:
+          error.status === 401
+            ? "Invalid Email or Password!"
+            : error.message || "An error occurred",
       },
     };
   }

@@ -7,10 +7,8 @@ import { loginRequest } from "../../db/action/login";
 import { getVideoRequest } from "../../db/action/Getvideos";
 import { logoutRequest } from "../../db/action/logout";
 import Error from "../Error";
-import { useSelector } from "react-redux";
 
 const LoginForm = (props) => {
-  const Outh = useSelector((state) => state.getVideoReducer);
   const [validated, setValidated] = useState(false);
   const [formData, setFormData] = useState({});
   const [showError, setShowError] = useState(false);
@@ -36,16 +34,12 @@ const LoginForm = (props) => {
     setValidated(true);
   };
   useEffect(() => {
-    const { success, message, manager_id } = loginReducer;
-    if (success === true && !Outh.success) {
-      manager_id === import.meta.env.VITE_MANAGER
-        ? navigate("/manager")
-        : (props.getVideoRequest({
-            collection: import.meta.env.VITE_NEEDREVIEW_COLLECTION,
-            // requestType: import.meta.env.REQUESTTYPEE,
-          }),
-          navigate("/videos"));
-    } else if (success === true) {
+    const { success, message, role_id } = loginReducer;
+    if (success === true && role_id === import.meta.env.VITE_MR) {
+      // props.getVideoRequest({ role_id: role_id });
+      navigate("/manager");
+    } else if (success === true && role_id === import.meta.env.VITE_RR) {
+      props.getVideoRequest({ role_id: role_id });
       navigate("/videos");
     } else {
       setInfo({
@@ -56,34 +50,6 @@ const LoginForm = (props) => {
       message && setShowError(true);
     }
   }, [loginReducer]);
-
-  ///user click back or initial state
-  // useEffect(() => {
-  //   props.logoutRequest();
-  // }, []);
-  // const logout = () => {
-  //   // Your logout logic here, e.g., clearing tokens, calling API, etc.
-  //   console.log("User logged out");
-  //   props.getVideoRequest(),
-  //     // Example: clear local storage
-  //     localStorage.removeItem("authToken");
-  // };
-  // useEffect(() => {
-  //   const handleBeforeUnload = (event) => {
-  //     logout();
-  //     // Optional: Display a confirmation dialog to the user
-  //     const confirmationMessage = "Are you sure you want to leave?";
-  //     (event || window.event).returnValue = confirmationMessage; // Gecko + IE
-  //     return confirmationMessage; // Gecko + Webkit, Safari, Chrome, etc.
-  //   };
-
-  //   window.addEventListener("beforeunload", handleBeforeUnload);
-
-  //   return () => {
-  //     window.removeEventListener("beforeunload", handleBeforeUnload);
-  //   };
-  // });
-
   return (
     <Container
       fluid
@@ -120,7 +86,7 @@ const LoginForm = (props) => {
               className="login-input text-lowercase bg-transparent mt-2 h-44 rounded-22 border-login-input ps-4 d-flex justify-content-center text-white"
               name="email"
               placeholder="User ID"
-              autoComplete="off"
+              // autoComplete="off"
               onChange={handleChange}
             />
             <Form.Control.Feedback type="invalid">

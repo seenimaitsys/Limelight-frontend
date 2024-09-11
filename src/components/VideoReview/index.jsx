@@ -1,40 +1,37 @@
 import { useEffect, useState } from "react";
-
 import { Container, Col, Button, Row, Image, Alert } from "react-bootstrap";
 import Frame_Arrow from "../../assets/images/Frame_Arrow.svg";
 import Check_mark from "../../assets/images/Check_mark.svg";
 import close_mark from "../../assets/images/close_mark.svg";
-import { isEmpty } from "lodash";
+import { isEmpty, isEqual } from "lodash";
 import DeclineReasonModal from "../Modal_for_declining";
 import { getVideoRequest, updateVideoRequest } from "../../db/action/Getvideos";
 import { bindActionCreators } from "redux";
 import { connect, useSelector } from "react-redux";
-import FindVideoAge from "../FindVideoAge";
 import NoImagePlaceholder from "../../assets/images/NoImagePlaceholder.svg";
-
 import { logoutRequest } from "../../db/action/logout";
 import NodataFound from "../NodataFound";
 import VideoReviewLoading from "../Loading/VideoReviewLoading";
+import moment from "moment";
 const VideoReview = (props) => {
+  const { getVideoReducer } = props;
+  // alert(getVideoReducer.video.id);
+
   const Outh = useSelector((state) => state.loginReducer);
 
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
-  const { getVideoReducer } = props;
 
   // Function to handle when video ends
   const handleVideoEnd = () => {
     setIsButtonEnabled(true);
-    sessionStorage.setItem("videoEnded", getVideoReducer.id);
+    sessionStorage.setItem("videoEnded", getVideoReducer.video?.id);
   };
-
   // Check session storage on component mount
   useEffect(() => {
-    const videoEnded = sessionStorage.getItem("videoEnded");
-    if (videoEnded === getVideoReducer.id) {
-      setIsButtonEnabled(true);
-    } else {
-      setIsButtonEnabled(false);
-    }
+    // + used for convert to number
+    isEqual(+sessionStorage.getItem("videoEnded"), +getVideoReducer.video?.id)
+      ? setIsButtonEnabled(true)
+      : setIsButtonEnabled(false);
   });
 
   // jwt token is notvalied the logout
@@ -46,9 +43,6 @@ const VideoReview = (props) => {
     }
   }, [getVideoReducer]);
 
-  const { days, hours, minutes } = FindVideoAge(
-    getVideoReducer.createdDate ? getVideoReducer.createdDate : false
-  );
   const [showModal, setShowModal] = useState(false);
 
   const handleModalClose = () => {
@@ -66,16 +60,11 @@ const VideoReview = (props) => {
     const form = event.currentTarget;
     if (form.checkValidity() === true) {
       event.stopPropagation();
-      getVideoReducer.reviewedBy
-        ? console.log("del alearady")
-        : props.updateVideoRequest({
-            collection: import.meta.env.VITE_NEEDREVIEW_COLLECTION,
-            videoinfo: { ...getVideoReducer },
-            reviewerEmail: Outh.email,
-            reviewStatus: form_Data.get("declinereason"),
-            isManagerReview:
-              Outh.manager_id === import.meta.env.VITE_MANAGER ? true : false,
-          });
+      props.updateVideoRequest({
+        role_id: Outh.role_id,
+        vidoeInfo: { ...getVideoReducer },
+        videostatus: form_Data.get("declinereason"),
+      });
 
       setShowModal(false);
     }
@@ -85,8 +74,6 @@ const VideoReview = (props) => {
 
   return (
     <>
-      {!getVideoReducer.success && !getVideoReducer.loading && <NodataFound />}
-
       <Container fluid>
         <h2
           className="text-center text-xl-start   ms-0 ms-xl-5  font-Poppins text-gray-200 fw-bold"
@@ -100,7 +87,7 @@ const VideoReview = (props) => {
           <>
             <h4 className="text-center text-xl-start ms-0 ms-xl-5 fs-20  font-Poppins text-gray-200 mt-2  fw-semibold">
               You have{" "}
-              <span className="fs-25 fw-900">{getVideoReducer.TotalVidos}</span>{" "}
+              <span className="fs-25 fw-900">{getVideoReducer.videoCount}</span>{" "}
               videos to review
             </h4>
 
@@ -126,9 +113,9 @@ const VideoReview = (props) => {
                     className=" rounded-30  shadow object-fit-fill border-video-border "
                     alt="Example image"
                     src={
-                      isEmpty(getVideoReducer.videoPreviewURL)
+                      isEmpty(getVideoReducer.video.video_preview_url)
                         ? NoImagePlaceholder
-                        : getVideoReducer.videoPreviewURL
+                        : getVideoReducer.video.video_preview_url
                     }
                   ></Image>
 
@@ -150,10 +137,13 @@ const VideoReview = (props) => {
                     autoPlay
                     playsInline
                     onEnded={handleVideoEnd}
-                    src={getVideoReducer.videoName}
+                    src={getVideoReducer.video.video_name}
                   >
                     {/* only used for video is localy avaliable */}
-                    <source src={getVideoReducer.videoName} type="video/mp4" />
+                    <source
+                      src={getVideoReducer.video.video_name}
+                      type="video/mp4"
+                    />
                   </video>
 
                   <h4
@@ -162,9 +152,8 @@ const VideoReview = (props) => {
                       fontSize: "clamp(1px, 6vw, 23px)",
                     }}
                   >
-                    Uploaded {days > 1 && `${days || 0} days`}{" "}
-                    {hours > 1 && days < 1 && `${hours || 0} hours`}
-                    {hours < 1 && days < 1 && `${minutes || 0} minutes`} ago
+                    Uploaded{" "}
+                    {moment.unix(getVideoReducer.video?.created_time).fromNow()}
                   </h4>
                 </Col>
               </Col>
@@ -176,9 +165,8 @@ const VideoReview = (props) => {
                 className="d-flex flex-column   mb-5 mb-xl-0 mb-lg-0"
               >
                 <h4 className="font-Poppins w-100 text-center text-lg-start  fw-semibold  d-none d-lg-block ">
-                  Uploaded {days > 1 && `${days || 0} days`}{" "}
-                  {hours > 1 && days < 1 && `${hours || 0} hours`}
-                  {hours < 1 && days < 1 && `${minutes || 0} minutes`} ago
+                  Uploaded{" "}
+                  {moment.unix(getVideoReducer.video?.created_time).fromNow()}
                 </h4>
 
                 <Col
@@ -190,13 +178,10 @@ const VideoReview = (props) => {
                 >
                   <Col
                     className="pb-5  pt-5  d-flex  align-items-center justify-content-center justify-content-xl-start justify-content-lg-start"
-                    xl={9}
-                    lg={9}
                     md={9}
-                    sm={12}
                     xs={12}
                   >
-                    {getVideoReducer.caption === "" ? (
+                    {getVideoReducer.video.caption === "" ? (
                       <h4 className="font-Poppins">No Caption is Available!</h4>
                     ) : (
                       <h4
@@ -206,7 +191,7 @@ const VideoReview = (props) => {
                         }}
                       >
                         <span className="h2">Caption: </span>
-                        {getVideoReducer.caption}
+                        {getVideoReducer.video.caption}
                       </h4>
                     )}
                   </Col>
@@ -218,37 +203,24 @@ const VideoReview = (props) => {
                       <Button
                         className="position-absolute h-65 w-130 rounded-18 bg-next-btn3  fs-25 shadow border-0"
                         onClick={() =>
-                          props.getVideoRequest({
-                            collection: import.meta.env
-                              .VITE_NEEDREVIEW_COLLECTION,
-                          })
+                          props.getVideoRequest({ role_id: Outh.role_id })
                         }
-                        disabled={
-                          getVideoReducer.reviewedBy ||
-                          getVideoReducer.alreadyUpdate
-                            ? false
-                            : true
-                        }
+                        disabled={!getVideoReducer.message}
                       >
                         Next <Image src={Frame_Arrow}></Image>
                       </Button>
                     </div>
                   </Col>
                 </Col>
-                {/* Approved and Decline buttons */}
-                {/* display error */}
-                {/* <Alert className="w-75" variant={"warning"}>
-              This is a alert—check it out!
-            </Alert> */}
                 <Col
                   xl={12}
                   md={12}
                   className={` mt-0 mt-xl-5 mt-lg-5 w-100 d-flex flex-column flex-lg-row flex-md-row flex-xl-row gap-4 align-items-center justify-content-center justify-content-lg-start justify-content-xl-start`}
                 >
-                  {getVideoReducer.reviewedBy && (
+                  {getVideoReducer.message && (
                     <Col xl={9} md={12} sm={12}>
                       <Alert
-                        variant={"success"}
+                        variant={getVideoReducer.message.variant}
                         className={` w-100 p-3 d-flex flex-column align-items-center justify-content-center`}
                       >
                         <Alert.Heading
@@ -256,42 +228,22 @@ const VideoReview = (props) => {
                             fontSize: "clamp(1px, 5vw, 23px)",
                           }}
                         >
-                          Video Reviewed Successfully
+                          {getVideoReducer.message.heading}
                         </Alert.Heading>
                         <p
                           className={`p-0 text-center mt-1 ${
-                            getVideoReducer.ReviewStatus != true &&
+                            getVideoReducer.message.title.charAt(0) == "D" &&
                             "text-danger"
                           }`}
                           style={{
                             fontSize: "clamp(10px, 5vw, 15px)",
                           }}
                         >
-                          {getVideoReducer.ReviewStatus != true
-                            ? `Decline : ${getVideoReducer.ReviewStatus}`
-                            : "Video has been Approved."}
+                          {getVideoReducer.message.title}
                         </p>
                       </Alert>
                     </Col>
                   )}
-
-                  {getVideoReducer.alreadyUpdate && (
-                    <Col xl={9} md={12} sm={12}>
-                      <Alert
-                        variant={"warning"}
-                        className={` w-100 p-3 d-flex flex-column align-items-center justify-content-center`}
-                      >
-                        <Alert.Heading
-                          style={{
-                            fontSize: "clamp(1px, 5vw, 23px)",
-                          }}
-                        >
-                          {getVideoReducer.message}
-                        </Alert.Heading>
-                      </Alert>
-                    </Col>
-                  )}
-
                   <Col
                     xl={3}
                     md={4}
@@ -299,27 +251,17 @@ const VideoReview = (props) => {
                     sm={12}
                     xs={12}
                     className={`d-flex flex-column ${
-                      (getVideoReducer.reviewedBy ||
-                        getVideoReducer.alreadyUpdate) &&
-                      "d-none"
+                      getVideoReducer.message && "d-none"
                     }`}
                   >
                     <Button
                       className="shadow text-wrap w-100 fw-semibold border-bt-border letterSpacing-1 fs-25 text-gray-300 bg-Approved-btn"
                       onClick={() =>
-                        getVideoReducer.reviewedBy
-                          ? console.log("alearsdy")
-                          : props.updateVideoRequest({
-                              collection: import.meta.env
-                                .VITE_NEEDREVIEW_COLLECTION,
-                              videoinfo: { ...getVideoReducer },
-                              reviewerEmail: Outh.email,
-                              reviewStatus: true,
-                              isManagerReview:
-                                Outh.manager_id === import.meta.env.VITE_MANAGER
-                                  ? true
-                                  : false,
-                            })
+                        props.updateVideoRequest({
+                          role_id: Outh.role_id,
+                          vidoeInfo: { ...getVideoReducer },
+                          videostatus: null,
+                        })
                       }
                       disabled={!isButtonEnabled}
                     >
@@ -330,15 +272,9 @@ const VideoReview = (props) => {
                       className="shadow mt-3 bg-Approved-btn rounded-circle d-none d-lg-block d-xl-block d-md-block fw-normal letterSpacing-1 h-50 w-51 fs-25 border-bt-border"
                       onClick={() =>
                         props.updateVideoRequest({
-                          collection: import.meta.env
-                            .VITE_NEEDREVIEW_COLLECTION,
-                          videoinfo: { ...getVideoReducer },
-                          reviewerEmail: Outh.email,
-                          reviewStatus: true,
-                          isManagerReview:
-                            Outh.manager_id === import.meta.env.VITE_MANAGER
-                              ? true
-                              : false,
+                          role_id: Outh.role_id,
+                          vidoeInfo: { ...getVideoReducer },
+                          videostatus: null,
                         })
                       }
                       disabled={!isButtonEnabled}
@@ -353,9 +289,7 @@ const VideoReview = (props) => {
                     sm={12}
                     xs={12}
                     className={`d-flex flex-column ${
-                      (getVideoReducer.reviewedBy ||
-                        getVideoReducer.alreadyUpdate) &&
-                      "d-none"
+                      getVideoReducer.message && "d-none"
                     }`}
                   >
                     <Button
@@ -378,17 +312,9 @@ const VideoReview = (props) => {
                   <Button
                     className="shadow mt-4 bg-next-btn3 d-block d-md-none d-lg-none d-xl-none w-100 fw-semibold text-white fs-25 letterSpacing-1 border-bt-border"
                     onClick={() =>
-                      props.getVideoRequest({
-                        collection: import.meta.env.VITE_NEEDREVIEW_COLLECTION,
-                      })
+                      props.getVideoRequest({ role_id: Outh.role_id })
                     }
-                    disabled={
-                      getVideoReducer.reviewedBy ||
-                      getVideoReducer.alreadyUpdate
-                        ? false
-                        : true
-                    }
-                    // disabled={getVideoReducer.reviewedBy ? false : true}
+                    disabled={!getVideoReducer.message}
                   >
                     Next
                   </Button>
@@ -397,7 +323,12 @@ const VideoReview = (props) => {
             </Row>
           </>
         ) : (
-          <VideoReviewLoading />
+          <>
+            {!getVideoReducer.success &&
+              !getVideoReducer.loading &&
+              isEmpty(getVideoReducer.video) && <NodataFound />}
+            {getVideoReducer.loading && <VideoReviewLoading />}
+          </>
         )}
       </Container>
 

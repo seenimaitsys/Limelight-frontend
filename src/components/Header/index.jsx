@@ -11,11 +11,11 @@ import { initLoginRequest } from "../../db/action/login";
 
 const Header = (props) => {
   const Outh = useSelector((state) => state.loginReducer);
-
+  console.log(Outh.email);
   const navigate = useNavigate();
   const HandleLogout = () => {
-    props.logoutRequest({ id: Outh.id });
-    props.initLoginRequest();
+    props.logoutRequest();
+    // props.initLoginRequest();
   };
 
   return (
@@ -80,16 +80,9 @@ const Header = (props) => {
                 loading="lazy"
                 width={"75%"}
               ></Image>
-
-              {/* <Image
-                src={image1}
-                alt="getherly"
-                loading="lazy"
-                width={"100%"}
-                ></Image> */}
             </Navbar.Brand>
           </Col>
-          {Outh.id && <Navbar.Toggle aria-controls="navbarScroll" />}
+          {Outh.email && <Navbar.Toggle aria-controls="navbarScroll" />}
 
           <Navbar.Collapse
             id="navbarScroll"
@@ -102,7 +95,7 @@ const Header = (props) => {
               style={{ maxHeight: "100px" }}
               navbarScroll
             ></Nav>
-            {Outh.id && (
+            {Outh.email && (
               <div className="d-flex gap-1 me-5 align-items-center  justify-content-center">
                 <Image
                   src={sample_men}
@@ -120,7 +113,7 @@ const Header = (props) => {
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>
-                    {Outh.manager_id === import.meta.env.VITE_MANAGER && (
+                    {Outh.role_id === import.meta.env.VITE_MR && (
                       <Dropdown.Item onClick={() => navigate("/add-reviewer")}>
                         Add New Reviewer
                       </Dropdown.Item>

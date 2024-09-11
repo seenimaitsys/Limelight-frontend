@@ -10,8 +10,6 @@ import ManagerReview from "../../components/ManagerReview";
 import ManagerPrivateRoute from "../../components/ManagerPrivateRoute";
 import ForgetPasswordLayout from "../../layout/ForgetPassword";
 import UpdatePasswordLayout from "../../layout/UpdatePassword";
-import VideoReviewLoading from "../../components/Loading/VideoReviewLoading";
-import ManagerHomeLoading from "../../components/Loading/ManagerHomeLoading";
 import AuthenticationFailedLayout from "../../layout/AuthenticationFaild";
 // import VideoList from "../../components/videopage";
 // import LoginForm from "../../components/LoginForm";
@@ -27,7 +25,6 @@ const Routers = () => {
         <Route path="/" element={<ReviewerLogion />} />
         <Route path="/list" element={<VideoList />} />
         <Route path="/forget" element={<ForgetPasswordLayout />} />
-        <Route path="/l" element={<ManagerHomeLoading />} />
         <Route
           path="/authfailed/:token"
           element={<AuthenticationFailedLayout />}
@@ -44,11 +41,11 @@ const Routers = () => {
           <Route path="/videos-list" element={<VideoList1 />} />
           <Route path="/manager-review" element={<ManagerReview />} />
           <Route path="/manager-review-videos" element={<VideoReview />} />
+          <Route path="/add-reviewer" element={<AddNewReviewers />} />
         </Route>
         {/* for reviewew */}
         <Route element={<PrivateRoute />}>
           <Route path="/videos" element={<VideoReview />} />
-          <Route path="/add-reviewer" element={<AddNewReviewers />} />
         </Route>
         <Route path="*" element={<Navigate to={"/"} />} />
       </Routes>

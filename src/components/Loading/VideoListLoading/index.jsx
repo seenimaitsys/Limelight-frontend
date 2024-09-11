@@ -1,8 +1,22 @@
 import { Placeholder, Col, Row, Container } from "react-bootstrap";
-
+import LoadingPlaceholder from "../../LoadingPlaceholder";
 const VideoListLoading = () => {
   return (
     <Container fluid>
+      <Row>
+        <Col xl={9}>
+          <LoadingPlaceholder
+            className1={`w-100 mt-0 mt-xl-5 mt-xl-0 d-flex align-items-center justify-content-center justify-content-xl-start`}
+            className2={`w-50 h-20 rounded-10 `}
+          />
+        </Col>
+        <Col className="w-100 d-flex align-items-center  justify-content-center">
+          <LoadingPlaceholder
+            className1={`w-100 mt-5  d-none d-xl-block`}
+            className2={`w-50 h-20 rounded-10 `}
+          />
+        </Col>
+      </Row>
       <Row className="ms-1 ms-lg-5 d-flex align-items-center justify-content-center">
         {[1, 2, 3, 4, 5, 6].map((value) => {
           return (

@@ -6,7 +6,7 @@ const VideoReviewLayout = () => {
   return (
     <>
       <Container fluid>
-        <VideoReview></VideoReview>
+        <VideoReview />
       </Container>
     </>
   );

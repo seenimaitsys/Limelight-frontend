@@ -25,29 +25,14 @@ $grid-breakpoints: (
   xxl: 1400px,
   xxxl: 2000px,
 );
-.font-Poppins {
-  font-family: Poppins;
-}
-.letter-spacing {
-  letter-spacing: 2%;
-}
-.font-Inter {
-  font-family: Inter;
-}
+
 .display-webkit-box {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 5; /* Number of lines to show */
 }
 //form design
-.login-form {
-  .login-input {
-    letter-spacing: 0.3px;
-    &::-webkit-input-placeholder {
-      color: #ffffff;
-    }
-  }
-}
+
 .letterSpacing-1 {
   letter-spacing: 1px;
 }

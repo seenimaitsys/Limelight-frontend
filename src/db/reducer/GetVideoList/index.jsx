@@ -19,7 +19,8 @@ const getVideoListReducer = (state = {}, action) => {
     case GET_VIDEO_LIST_SUCCESS:
       state = {
         ...state,
-
+        loading: false,
+        success: true,
         ...action.payload,
       };
       break;

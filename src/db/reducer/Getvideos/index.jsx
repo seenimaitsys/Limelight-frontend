@@ -7,23 +7,18 @@ import {
   UPDATE_VIDEO_SUCCESS,
   UPDATE_VIDEO_REQUEST_FAIL,
 } from "../../actionTypes/Getvideos";
-import {
-  LOGOUT_REQUEST,
-  LOGOUT_SUCCESS,
-  REMOVEVIDEOREDUCER,
-} from "../../actionTypes/logout";
+import { LOGOUT_SUCCESS, REMOVEVIDEOREDUCER } from "../../actionTypes/logout";
 
 const getVideoReducer = (state = {}, action) => {
   switch (action.type) {
     case LOGOUT_SUCCESS:
-    case LOGOUT_REQUEST:
       state = {};
       break;
     case REMOVEVIDEOREDUCER:
       state = {};
       break;
     case INIT_GET_VIDEO_REQUEST:
-      state = { loading: false, success: false };
+      state = { loading: true, success: false };
       break;
     case GET_VIDEO_REQUEST:
       state = { loading: true, success: false };

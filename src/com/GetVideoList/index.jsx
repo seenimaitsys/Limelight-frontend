@@ -1,12 +1,12 @@
 import https from "../../axios";
 
 export const getVideoList = async (params) => {
-  const { collection, managerQuery } = params;
+  const { video_status, reviewer_role } = params;
 
   try {
-    return await https.post("/getvideolist", {
-      collection,
-      managerQuery,
+    return await https.post("/api/manager/videolist", {
+      video_status,
+      reviewer_role,
     });
   } catch (exception) {
     const error = exception.toJSON();
@@ -14,7 +14,6 @@ export const getVideoList = async (params) => {
       data: {
         loading: false,
         success: false,
-
         message: error.message,
       },
     };

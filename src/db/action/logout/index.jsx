@@ -1,9 +1,8 @@
-import { LOGOUT_REQUEST, REMOVEVIDEOREDUCER } from "../../actionTypes/logout";
+import { LOGOUT_SUCCESS, REMOVEVIDEOREDUCER } from "../../actionTypes/logout";
 
-export const logoutRequest = (params) => {
+export const logoutRequest = () => {
   return {
-    type: LOGOUT_REQUEST,
-    payload: params,
+    type: LOGOUT_SUCCESS,
   };
 };
 export const RemoveVideoReducer = () => {
